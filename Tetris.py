@@ -31,6 +31,7 @@ global_y = 0
 global_rot = 0
 value_line = 100
 score = 0
+pause = False
 lvl_buffer = 0 # max is 57, reduces fall_cooldown and adds ups 3 per lvl (10 lines)
 lines_global = 0
 global_col = [0, 0, 0]
@@ -439,7 +440,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         create_text("Next Piece:", arial_font, (255, 255, 255), 500, 200)
-        create_text("PyTetris 1.0.0", arial_font, (255, 255, 255), 675, 0)
+        create_text("PyTetris 1.1.0", arial_font, (255, 255, 255), 675, 0)
         create_text("Programmed in Python", arial_font, (255, 255, 255), 650, 935)
         create_text(f"Score: {score}", arial_font, (255, 255, 255), 500, 600)
         create_text(f"Lines: {lines_global}", arial_font, (255, 255, 255), 500, 650)
@@ -465,10 +466,19 @@ while running:
             elif event.key == pygame.K_s:
                 fall_counter = 0
                 fall_cooldown = drop_speed
+            elif event.key == pygame.K_p:
+                if not pause:
+                    pause = True
+                    pygame.display.set_caption(title + " - PAUSED")
+                else:
+                    pause = False
+                    pygame.display.set_caption(title)
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_s:
                 fall_cooldown = 60 - lvl_buffer
         
+    if pause:
+        continue
 
     if fall_counter == 0 and checking_piece():
         global_y = 0
