@@ -1,3 +1,4 @@
+
 import pygame
 import random
 import math
@@ -438,11 +439,12 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         create_text("Next Piece:", arial_font, (255, 255, 255), 500, 200)
-        create_text("PyTetris", arial_font, (255, 255, 255), 700, 0)
-        create_text("Programmed in Python", arial_font, (255, 255, 255), 620, 970)
+        create_text("PyTetris 1.0.0", arial_font, (255, 255, 255), 675, 0)
+        create_text("Programmed in Python", arial_font, (255, 255, 255), 650, 935)
         create_text(f"Score: {score}", arial_font, (255, 255, 255), 500, 600)
         create_text(f"Lines: {lines_global}", arial_font, (255, 255, 255), 500, 650)
         create_text(f"Level: {math.floor(lines_global / 10)}", arial_font, (255, 255, 255), 500, 700)
+        create_text(f"Copyright (c) 2024-2026 France Miguel Jaen", arial_font, (255, 255, 255), 550, 970)
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
