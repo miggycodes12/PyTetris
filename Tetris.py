@@ -29,7 +29,7 @@ for i in range(20):
 global_x = 3
 global_y = 0
 global_rot = 0
-value_line = 100
+value_line = 100 
 score = 0
 pause = False
 lvl_buffer = 0 # max is 57, reduces fall_cooldown and adds ups 3 per lvl (10 lines)
@@ -439,8 +439,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        #SCREEN.fill((0, 0, 0))
         create_text("Next Piece:", arial_font, (255, 255, 255), 500, 200)
-        create_text("PyTetris 1.1.0", arial_font, (255, 255, 255), 675, 0)
+        create_text("PyTetris 1.1.1", arial_font, (255, 255, 255), 675, 0)
         create_text("Programmed in Python", arial_font, (255, 255, 255), 650, 935)
         create_text(f"Score: {score}", arial_font, (255, 255, 255), 500, 600)
         create_text(f"Lines: {lines_global}", arial_font, (255, 255, 255), 500, 650)
@@ -528,9 +530,23 @@ while running:
     
     cleared = clear_row()
     if type(cleared) is list:
+        lines = cleared[0]
         lines_global += cleared[0]
         if cleared[0]:
-            score += value_line * cleared[0]
+
+            # single
+            if lines == 1:
+                score += value_line
+            # double
+            elif lines == 2:
+                score += value_line * 14 * lines
+            # triples
+            elif lines == 3:
+                score += value_line * 124 * lines
+            # tetrises
+            elif lines >= 4:
+                score += value_line * 2871 * lines
+
     if math.floor(lines_global / 10) == next_lvl:
         value_line += 100
         if lvl_buffer < 57:
