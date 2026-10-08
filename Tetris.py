@@ -12,6 +12,7 @@ SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 
 # configurations
 title = "PyTetris"
+version = "1.1.2"
 running = True
 max_fps_setting = pygame.time.Clock()
 max_fps = 60
@@ -281,33 +282,41 @@ def fall_piece(piece):
     else:
         kill_piece(piece)
 
-def bring_down(amount, ignore):
+def bring_down():
     before = None
+    empties = 0
     for row in range(len(board)-1, 0-1, -1):
-        if not 1 in board[row] or row > ignore:
+        if not 1 in board[row] or board[row] == [0]*10:
+            #print("added empty")
+            empties += 1
             continue
         else:
+            amount_cleared = empties
             for tile in range(len(board[row])):
                 if board[row][tile] == 1:
                     board[row][tile] = 0
-                    board[row+amount][tile] = 1
+                    #print(empties)
+                    board[row+empties][tile] = 1
                 if col_board[row][tile] != "non":
                     before = col_board[row][tile]
                     col_board[row][tile] = "non"
-                    col_board[row+amount][tile] = before
+                    col_board[row+empties][tile] = before
+            empties = 0
+
+            if not 1 in board[row] or board[row] == [0]*10:
+                empties = amount_cleared
 
 def clear_row():
     lines = 0
-    cleared = []
     for row in range(len(board)):
         if not 1 in board[row]:
             continue
         elif board[row] == [1]*10:
             board[row] = [0]*10
             lines += 1
-            cleared.append(row)
     if lines:
-        bring_down(lines, cleared[0])
+        bring_down()
+        #double_check_empty_rows()
         return [lines]
     else:
         return 0
@@ -442,7 +451,7 @@ while running:
 
         #SCREEN.fill((0, 0, 0))
         create_text("Next Piece:", arial_font, (255, 255, 255), 500, 200)
-        create_text("PyTetris 1.1.1", arial_font, (255, 255, 255), 675, 0)
+        create_text(f"PyTetris {version}", arial_font, (255, 255, 255), 675, 0)
         create_text("Programmed in Python", arial_font, (255, 255, 255), 650, 935)
         create_text(f"Score: {score}", arial_font, (255, 255, 255), 500, 600)
         create_text(f"Lines: {lines_global}", arial_font, (255, 255, 255), 500, 650)
@@ -536,16 +545,16 @@ while running:
 
             # single
             if lines == 1:
-                score += value_line
+                score += value_line * 7
             # double
             elif lines == 2:
-                score += value_line * 14 * lines
+                score += value_line * 49 * lines
             # triples
             elif lines == 3:
-                score += value_line * 124 * lines
+                score += value_line * 201 * lines
             # tetrises
             elif lines >= 4:
-                score += value_line * 2871 * lines
+                score += value_line * 428 * lines
 
     if math.floor(lines_global / 10) == next_lvl:
         value_line += 100
